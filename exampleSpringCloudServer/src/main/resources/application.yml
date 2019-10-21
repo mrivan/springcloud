@@ -1,0 +1,40 @@
+management:
+  endpoints:
+    enabled-by-default: true
+    web:
+      exposure:
+        include: env, refresh, restart
+        
+server:
+  port: 8888        
+
+
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      label: master
+      server:
+        bootstrap: true
+        jdbc:
+          order: 1
+          sql: SELECT PROPERTIES.KEY, PROPERTIES.VALUE from PROPERTIES where APPLICATION=? and PROFILE=? and LABEL=?
+    refresh:
+      extra-refreshable: javax.sql.DataSource
+      enabled: true
+  datasource:
+    jndi-name: java:/ipzsDS
+#    continue-on-error: true
+#    data: classpath:data-jdbc.sql
+#    driver-class-name: org.h2.Driver
+#    password: ''
+#    schema: classpath:schema-jdbc.sql
+#    url: jdbc:h2:file:~/test
+#    username: sa
+#  h2:
+#    console:
+#      enabled: true
+#      path: /h2
+  profiles:
+    active: jdbc
